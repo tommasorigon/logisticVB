@@ -1,8 +1,8 @@
 
 
-This document aim to reproduce the results of the paper [Durante and Rigon (2017)](https://arxiv.org/abs/1711.06999). Our implementations are made available through the R functions [`functions.R`](), which can be downloaded from this repository.
+This document aim to reproduce the simulation study of the paper [Durante and Rigon (2017). *Conditionally conjugate variational Bayes in logistic models*](https://arxiv.org/abs/1711.06999). The core functions of our implementations are made available in the file [`functions.R`](https://github.com/tommasorigon/logisticVB/blob/master/logistic.R), which can be downloaded from this repository.
 
-All the analyses are performed with a **MacBook Air (OS X Sierra, version 10.13.1)**, using a R version **3.5.0**. Notice that the matrix decompositions involved in this code might differ across operating systems. 
+All the analyses are performed with a **MacBook Air (OS X Sierra, version 10.13.1)**, using a R version **3.5.0**. 
 
 Before starting the analysis, we load in memory some useful libraries, including the `logistic` library.
 
