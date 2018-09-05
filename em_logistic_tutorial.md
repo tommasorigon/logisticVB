@@ -42,11 +42,11 @@ colnames(tab) <- 0:5
 kable(tab)
 ```
 
-                          0           1           2           3           4            5
----------------  ----------  ----------  ----------  ----------  ----------  -----------
-Newton_Raphson    -81.09822   -38.81425   -36.27081   -35.43309   -26.31365   -733.67090
-EM                -81.09822   -38.81425   -36.77784   -36.33180   -36.16827    -36.06429
-MM                -81.09822   -38.81425   -37.02854   -36.52533   -36.33067    -36.23546
+|               |         0|         1|         2|         3|         4|          5|
+|:--------------|---------:|---------:|---------:|---------:|---------:|----------:|
+|Newton_Raphson | -81.09822| -38.81425| -36.27081| -35.43309| -26.31365| -733.67090|
+|EM             | -81.09822| -38.81425| -36.77784| -36.33180| -36.16827|  -36.06429|
+|MM             | -81.09822| -38.81425| -37.02854| -36.52533| -36.33067|  -36.23546|
 
 Since the algorithms are initialized at the same point (0,0), the log-likelihood at iteration `0` is the same for all the methods. Moreover, they also coincide at iteration `1`, because the three algorithms produce the same updating step whenever beta is equal to zero. Starting form iteration `2` they become different. The log-likelihood sequence of Newton-Raphson algorithm falls at iteration `5`, and the beta coefficients diverge. Conversely, both the MM and the EM algorithms produce a monotonic sequence and eventually reach convergence.
 
