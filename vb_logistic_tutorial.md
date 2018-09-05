@@ -9,10 +9,10 @@ Before starting the analysis, we load in memory some useful libraries, including
 
 ```r
 rm(list=ls())
-library(logistic)# Library that can be downloaded from this github repository
-library(knitr)   # To produce "nice" table
-library(ggplot2) # Plots
-library(reshape2)# Reshaping data, used together with ggplot2
+source("logistic.R") # R file that can be downloaded from this github repository
+library(knitr)      # To produce "nice" table
+library(ggplot2)    # Plots
+library(reshape2)   # Reshaping data, used together with ggplot2
 ```
 
 ## Comparison between CAVI and SVI algorithms

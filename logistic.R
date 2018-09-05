@@ -3,6 +3,12 @@ logit_VB <- function(x, y,  tol = 1e-16, prior, maxiter=10000){
   if (is.null(n <- nrow(x)))
     stop("'x' must be a matrix")
   
+  # Compute the log-determinant of a matrix
+  ldet <- function(x) {
+    if(!is.matrix(x)) return(log(x))
+    determinant(x,logarithm = TRUE)$modulus
+  }
+
   lowerbound <- numeric(maxiter)
   p          <- ncol(x)
   
@@ -93,11 +99,4 @@ logit_SVB <- function(x, y,  tol = 1e-16, prior, maxiter=1000, tau=1, kappa=0.7)
   mu_vb      <- Sigma_vb%*%Eta1_out
   
   return(list(mu=mu_vb,Sigma=Sigma_vb))
-}
-
-
-# For internal use only
-ldet <- function(x) {
-  if(!is.matrix(x)) return(log(x))
-  determinant(x,logarithm = TRUE)$modulus
 }
