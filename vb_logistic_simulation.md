@@ -1,17 +1,6 @@
----
-title: ""
-author: ""
-date: ""
-output: 
-  html_document: 
-    keep_md: yes
-editor_options: 
-  chunk_output_type: console
----
 
 
-
-This document aim to reproduce the results of the paper [Durante and Rigon (2017)](https://arxiv.org/abs/1711.06999). Our implementations are made available through the R package [`logistic`](), which can be downloaded from this repository.
+This document aim to reproduce the results of the paper [Durante and Rigon (2017)](https://arxiv.org/abs/1711.06999). Our implementations are made available through the R functions [`functions.R`](), which can be downloaded from this repository.
 
 All the analyses are performed with a **MacBook Air (OS X Sierra, version 10.13.1)**, using a R version **3.5.0**. Notice that the matrix decompositions involved in this code might differ across operating systems. 
 
