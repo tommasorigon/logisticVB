@@ -27,16 +27,16 @@ beta <- c(1, 1)
 prior <- list(mu = rep(0,2), Sigma = diag(10,2))
 
 # SVI parameter settings
-iter    <- 10^4 # Number of iterations
-tau     <- 1000    # Delay parameter
+iter    <- 10^4  # Number of iterations
+tau     <- 1    # Delay parameter
 kappa   <- 0.75  # Forgetting rate parameter
 ```
 
 We replicate the simulation study for different sample sizes `n`, to assess the performance of the variational approximations to concentrate around the true value `beta` as `n` increases. 
 
-### Number of observations `n = 100`
+### Number of observations `n = 20`
 
-We conduct the simulation for `n = 100`. The covariate `x` is randomly generated taking uniform values over the space (-2,2).
+We conduct the simulation for `n = 20`. The covariate `x` is randomly generated taking uniform values over the space (-2,2).
 
 ```r
 n <- 20 # Setting the sample size
@@ -66,7 +66,9 @@ beta1_SVI <- rnorm(10^4, SVI_output$mu[2], sqrt(SVI_output$Sigma[2,2]))
 data_plot <- data.frame(Posterior = c(beta0_CAVI,beta1_CAVI,beta0_SVI,beta1_SVI), beta = rep(rep(c("Intercept","Slope"),each=10^4),2), Algorithm = rep(c("CAVI","SVI"),each=2*10^4), Sample_size = n)
 ```
 
-### Number of observations `n = 1'000`, `n = 10'000` and `n = 100'000`.
+### Number of observations `n = 100`, `n = 1'000` and `n = 10'000`.
+
+The same simulation study is conducted other 3 times with different sample sizes, namely `n = 100`, `n = 1'000` and `n = 10'000`. Beside that, the code is exactly the same as in the previous step.
 
 ```r
 n <- 100 # Setting the sample size
@@ -89,7 +91,6 @@ beta1_SVI <- rnorm(10^4, SVI_output$mu[2], sqrt(SVI_output$Sigma[2,2]))
 
 data_plot <- rbind(data_plot,data.frame(Posterior = c(beta0_CAVI,beta1_CAVI,beta0_SVI,beta1_SVI), beta = rep(rep(c("Intercept","Slope"),each=10^4),2), Algorithm = rep(c("CAVI","SVI"),each=2*10^4), Sample_size = n))
 ```
-
 
 ```r
 n <- 1000 # Setting the sample size
@@ -137,10 +138,13 @@ data_plot <- rbind(data_plot,data.frame(Posterior = c(beta0_CAVI,beta1_CAVI,beta
 
 ### Final plot
 
+The following code produce the plot included in the paper
+
 ```r
 ggplot(data=data_plot, aes(x = as.factor(Sample_size), y = Posterior, fill=Algorithm)) + facet_grid(~beta) + geom_boxplot(alpha=0.7) + theme_bw() + scale_fill_grey() + geom_hline(yintercept=1, linetype="dotted") + xlab("Sample size") + ylab("Regression Coefficient")
 ggsave("final_plot.png", width=10,height=5)
 ggsave("final_plot.pdf", width=10,height=5)
 ```
 
+![](https://raw.githubusercontent.com/tommasorigon/logisticVB/master/final_plot.png)
 
