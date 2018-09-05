@@ -4,20 +4,19 @@ This document aim to reproduce the simulation study of the paper [Durante and Ri
 
 All the analyses are performed with a **MacBook Air (OS X Sierra, version 10.13.1)**, using a R version **3.5.0**. 
 
-Before starting the analysis, we load in memory some useful libraries, including the `logistic` library.
+Before starting the analysis, we load in memory the file [`functions.R`](https://github.com/tommasorigon/logisticVB/blob/master/logistic.R) and the `ggplot2` library.
 
 ```r
 rm(list=ls())
 source("logistic.R") # R file that can be downloaded from this github repository
-library(knitr)       # To produce "nice" table
 library(ggplot2)     # Plots
 ```
 
 ## Comparison between CAVI and SVI algorithms
 
-We consider a simulated dataset having a binary output `y` and a single continous covariate `x`. We obtain the posterior distribution using both the Coordinate Ascent Variational Inference (CAVI) algorithm (`logit_CAVI` function) and the Stochastic Variational Inference (SVI) algorithm (`logit_SVI` function).
+We consider a simulated dataset having a binary output `y` and a single continuous covariate `x`. We obtain the posterior distribution using both the Coordinate Ascent Variational Inference (CAVI) algorithm (`logit_CAVI` function) and the Stochastic Variational Inference (SVI) algorithm (`logit_SVI` function).
 
-In the following code, we set the unknown regression coefficients `beta`, as well as the prior hyperparameters. Moreover, the SVI algorithm requires the choice of some tuning parameters: the number of iterations (`iter`), the delay (`tau`) and the forgetting rate (`kappa`). All these parameter settings are fixed through the simulations. 
+In the following code, we set both the unknown regression coefficients `beta` equal to one. Moreover, we select fairly uninformative prior hyperparameters. Finally, the SVI algorithm requires the choice of some tuning parameters: the number of iterations (`iter`), the delay (`tau`) and the forgetting rate (`kappa`), which are all set in the code below. All these parameters are fixed through the simulations. 
 
 ```r
 # True vector of regression coefficients
@@ -32,7 +31,7 @@ tau     <- 1    # Delay parameter
 kappa   <- 0.75  # Forgetting rate parameter
 ```
 
-We replicate the simulation study for different sample sizes `n`, to assess the performance of the variational approximations to concentrate around the true value `beta` as `n` increases. 
+We replicate the simulation study for different sample sizes `n`, to empirically check whethee the variational approximations concentrate around the true value `beta`, as `n` increases. 
 
 ### Sample size `n = 20`
 
@@ -53,14 +52,15 @@ set.seed(1010)     # Set the seed to make this experiment reproducible
 CAVI_output <- logit_CAVI(X = X, y = y, prior = prior) # CAVI algorithm
 SVI_output  <- logit_SVI(X = X, y = y,  prior = prior,  iter = iter, tau = tau, kappa = kappa) # SVI algorithm
 ```
+
 Finally, we simulate posterior draws from the CAVI variational distribution from the SVI variational distribution. These values will be used to construct the final plot.
 
 ```r
 set.seed(100)
 beta0_CAVI <- rnorm(10^4, CAVI_output$mu[1], sqrt(CAVI_output$Sigma[1,1]))
 beta1_CAVI <- rnorm(10^4, CAVI_output$mu[2], sqrt(CAVI_output$Sigma[2,2]))
-beta0_SVI <- rnorm(10^4, SVI_output$mu[1], sqrt(SVI_output$Sigma[1,1]))
-beta1_SVI <- rnorm(10^4, SVI_output$mu[2], sqrt(SVI_output$Sigma[2,2]))
+beta0_SVI  <- rnorm(10^4, SVI_output$mu[1], sqrt(SVI_output$Sigma[1,1]))
+beta1_SVI  <- rnorm(10^4, SVI_output$mu[2], sqrt(SVI_output$Sigma[2,2]))
 
 data_plot <- data.frame(Posterior = c(beta0_CAVI,beta1_CAVI,beta0_SVI,beta1_SVI), beta = rep(rep(c("Intercept","Slope"),each=10^4),2), Algorithm = rep(c("CAVI","SVI"),each=2*10^4), Sample_size = n)
 ```
@@ -84,8 +84,8 @@ SVI_output  <- logit_SVI(X = X, y = y,  prior = prior,  iter = iter, tau = tau, 
 set.seed(100)
 beta0_CAVI <- rnorm(10^4, CAVI_output$mu[1], sqrt(CAVI_output$Sigma[1,1]))
 beta1_CAVI <- rnorm(10^4, CAVI_output$mu[2], sqrt(CAVI_output$Sigma[2,2]))
-beta0_SVI <- rnorm(10^4, SVI_output$mu[1], sqrt(SVI_output$Sigma[1,1]))
-beta1_SVI <- rnorm(10^4, SVI_output$mu[2], sqrt(SVI_output$Sigma[2,2]))
+beta0_SVI  <- rnorm(10^4, SVI_output$mu[1], sqrt(SVI_output$Sigma[1,1]))
+beta1_SVI  <- rnorm(10^4, SVI_output$mu[2], sqrt(SVI_output$Sigma[2,2]))
 
 data_plot <- rbind(data_plot,data.frame(Posterior = c(beta0_CAVI,beta1_CAVI,beta0_SVI,beta1_SVI), beta = rep(rep(c("Intercept","Slope"),each=10^4),2), Algorithm = rep(c("CAVI","SVI"),each=2*10^4), Sample_size = n))
 ```
@@ -105,8 +105,8 @@ SVI_output  <- logit_SVI(X = X, y = y,  prior = prior,  iter = iter, tau = tau, 
 set.seed(100)
 beta0_CAVI <- rnorm(10^4, CAVI_output$mu[1], sqrt(CAVI_output$Sigma[1,1]))
 beta1_CAVI <- rnorm(10^4, CAVI_output$mu[2], sqrt(CAVI_output$Sigma[2,2]))
-beta0_SVI <- rnorm(10^4, SVI_output$mu[1], sqrt(SVI_output$Sigma[1,1]))
-beta1_SVI <- rnorm(10^4, SVI_output$mu[2], sqrt(SVI_output$Sigma[2,2]))
+beta0_SVI  <- rnorm(10^4, SVI_output$mu[1], sqrt(SVI_output$Sigma[1,1]))
+beta1_SVI  <- rnorm(10^4, SVI_output$mu[2], sqrt(SVI_output$Sigma[2,2]))
 
 data_plot <- rbind(data_plot,data.frame(Posterior = c(beta0_CAVI,beta1_CAVI,beta0_SVI,beta1_SVI), beta = rep(rep(c("Intercept","Slope"),each=10^4),2), Algorithm = rep(c("CAVI","SVI"),each=2*10^4), Sample_size = n))
 ```
@@ -126,8 +126,8 @@ SVI_output  <- logit_SVI(X = X, y = y,  prior = prior,  iter = iter, tau = tau, 
 set.seed(100)
 beta0_CAVI <- rnorm(10^4, CAVI_output$mu[1], sqrt(CAVI_output$Sigma[1,1]))
 beta1_CAVI <- rnorm(10^4, CAVI_output$mu[2], sqrt(CAVI_output$Sigma[2,2]))
-beta0_SVI <- rnorm(10^4, SVI_output$mu[1], sqrt(SVI_output$Sigma[1,1]))
-beta1_SVI <- rnorm(10^4, SVI_output$mu[2], sqrt(SVI_output$Sigma[2,2]))
+beta0_SVI  <- rnorm(10^4, SVI_output$mu[1], sqrt(SVI_output$Sigma[1,1]))
+beta1_SVI  <- rnorm(10^4, SVI_output$mu[2], sqrt(SVI_output$Sigma[2,2]))
 
 data_plot <- rbind(data_plot,data.frame(Posterior = c(beta0_CAVI,beta1_CAVI,beta0_SVI,beta1_SVI), beta = rep(rep(c("Intercept","Slope"),each=10^4),2), Algorithm = rep(c("CAVI","SVI"),each=2*10^4), Sample_size = n))
 ```
