@@ -34,7 +34,7 @@ kappa   <- 0.75  # Forgetting rate parameter
 
 We replicate the simulation study for different sample sizes `n`, to assess the performance of the variational approximations to concentrate around the true value `beta` as `n` increases. 
 
-### Number of observations `n = 20`
+### Sample size `n = 20`
 
 We conduct the simulation for `n = 20`. The covariate `x` is randomly generated taking uniform values over the space (-2,2).
 
@@ -65,7 +65,7 @@ beta1_SVI <- rnorm(10^4, SVI_output$mu[2], sqrt(SVI_output$Sigma[2,2]))
 data_plot <- data.frame(Posterior = c(beta0_CAVI,beta1_CAVI,beta0_SVI,beta1_SVI), beta = rep(rep(c("Intercept","Slope"),each=10^4),2), Algorithm = rep(c("CAVI","SVI"),each=2*10^4), Sample_size = n)
 ```
 
-### Number of observations `n = 100`, `n = 1'000` and `n = 10'000`.
+### Sample size `n = 100`, `n = 1'000` and `n = 10'000`.
 
 The same simulation study is conducted other 3 times with different sample sizes, namely `n = 100`, `n = 1'000` and `n = 10'000`. Beside that, the code is exactly the same as in the previous step.
 
