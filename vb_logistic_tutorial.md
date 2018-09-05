@@ -11,7 +11,6 @@ rm(list=ls())
 source("logistic.R") # R file that can be downloaded from this github repository
 library(knitr)       # To produce "nice" table
 library(ggplot2)     # Plots
-library(reshape2)    # Reshaping data, used together with ggplot2
 ```
 
 ## Comparison between CAVI and SVI algorithms
@@ -22,7 +21,7 @@ In the following code, we set the unknown regression coefficients `beta`, as wel
 
 ```r
 # True vector of regression coefficients
-beta <- c(1, 0.5)
+beta <- c(1, 1)
 
 # Prior hyperparameters
 prior <- list(mu = rep(0,2), Sigma = diag(10,2))
@@ -42,7 +41,7 @@ We conduct the simulation for `n = 100`. The covariate `x` is randomly generated
 ```r
 n <- 100 # Setting the sample size
 
-set.seed(1010)     # Set the seed to make this experiment reproducible
+set.seed(123)     # Set the seed to make this experiment reproducible
 x <- runif(n,-2,2) # Generating the covariate space
 X <- cbind(1,x)    # Design matrix: the intercept is included
 y <- rbinom(n,1,prob = plogis(X%*%beta))
@@ -62,16 +61,97 @@ In the above Table we show the mean of the variational solution for the CAVI alg
 
 | CAVI_mean|  SVI_mean|
 |---------:|---------:|
-| 1.2278775| 1.2727374|
-| 0.7634757| 0.9170294|
+|  1.312584| 1.3456096|
+|  0.949651| 0.9089779|
 
 Finally, we simulate posterior draws from the CAVI variational distribution from the SVI variational distribution. These values will be used to construct the final plot.
 
 ```r
-beta0_CAVI <- rnorm(10^5, CAVI_output$mu[1], sqrt(CAVI_output$Sigma[1,1]))
-beta1_CAVI <- rnorm(10^5, CAVI_output$mu[2], sqrt(CAVI_output$Sigma[2,2]))
+set.seed(100)
+beta0_CAVI <- rnorm(10^4, CAVI_output$mu[1], sqrt(CAVI_output$Sigma[1,1]))
+beta1_CAVI <- rnorm(10^4, CAVI_output$mu[2], sqrt(CAVI_output$Sigma[2,2]))
 
-beta0_SVI <- rnorm(10^5, SVI_output$mu[1], sqrt(SVI_output$Sigma[1,1]))
-beta1_SVI <- rnorm(10^5, SVI_output$mu[2], sqrt(SVI_output$Sigma[2,2]))
+beta0_SVI <- rnorm(10^4, SVI_output$mu[1], sqrt(SVI_output$Sigma[1,1]))
+beta1_SVI <- rnorm(10^4, SVI_output$mu[2], sqrt(SVI_output$Sigma[2,2]))
+
+data_plot <- data.frame(Posterior = c(beta0_CAVI,beta1_CAVI,beta0_SVI,beta1_SVI), beta = rep(rep(c("Intercept","Slope"),each=10^4),2), Algorithm = rep(c("CAVI","SVI"),each=2*10^4), Sample_size = n)
 ```
+
+### Number of observations `n = 1'000`, `n = 10'000` and `n = 100'000`.
+
+```r
+n <- 1000 # Setting the sample size
+
+set.seed(123)     # Set the seed to make this experiment reproducible
+x <- runif(n,-2,2) # Generating the covariate space
+X <- cbind(1,x)    # Design matrix: the intercept is included
+y <- rbinom(n,1,prob = plogis(X%*%beta))
+
+set.seed(1010)     # Set the seed to make this experiment reproducible
+CAVI_output <- logit_CAVI(X = X, y = y, prior = prior) # CAVI algorithm
+SVI_output  <- logit_SVI(X = X, y = y,  prior = prior,  iter = iter, tau = tau, kappa = kappa) # SVI algorithm
+
+set.seed(100)
+beta0_CAVI <- rnorm(10^4, CAVI_output$mu[1], sqrt(CAVI_output$Sigma[1,1]))
+beta1_CAVI <- rnorm(10^4, CAVI_output$mu[2], sqrt(CAVI_output$Sigma[2,2]))
+
+beta0_SVI <- rnorm(10^4, SVI_output$mu[1], sqrt(SVI_output$Sigma[1,1]))
+beta1_SVI <- rnorm(10^4, SVI_output$mu[2], sqrt(SVI_output$Sigma[2,2]))
+
+data_plot <- rbind(data_plot,data.frame(Posterior = c(beta0_CAVI,beta1_CAVI,beta0_SVI,beta1_SVI), beta = rep(rep(c("Intercept","Slope"),each=10^4),2), Algorithm = rep(c("CAVI","SVI"),each=2*10^4), Sample_size = n))
+```
+
+```r
+n <- 10000 # Setting the sample size
+
+set.seed(123)     # Set the seed to make this experiment reproducible
+x <- runif(n,-2,2) # Generating the covariate space
+X <- cbind(1,x)    # Design matrix: the intercept is included
+y <- rbinom(n,1,prob = plogis(X%*%beta))
+
+set.seed(1010)     # Set the seed to make this experiment reproducible
+CAVI_output <- logit_CAVI(X = X, y = y, prior = prior) # CAVI algorithm
+SVI_output  <- logit_SVI(X = X, y = y,  prior = prior,  iter = iter, tau = tau, kappa = kappa) # SVI algorithm
+
+set.seed(100)
+beta0_CAVI <- rnorm(10^4, CAVI_output$mu[1], sqrt(CAVI_output$Sigma[1,1]))
+beta1_CAVI <- rnorm(10^4, CAVI_output$mu[2], sqrt(CAVI_output$Sigma[2,2]))
+
+beta0_SVI <- rnorm(10^4, SVI_output$mu[1], sqrt(SVI_output$Sigma[1,1]))
+beta1_SVI <- rnorm(10^4, SVI_output$mu[2], sqrt(SVI_output$Sigma[2,2]))
+
+data_plot <- rbind(data_plot,data.frame(Posterior = c(beta0_CAVI,beta1_CAVI,beta0_SVI,beta1_SVI), beta = rep(rep(c("Intercept","Slope"),each=10^4),2), Algorithm = rep(c("CAVI","SVI"),each=2*10^4), Sample_size = n))
+```
+
+```r
+n <- 100000 # Setting the sample size
+
+set.seed(123)     # Set the seed to make this experiment reproducible
+x <- runif(n,-2,2) # Generating the covariate space
+X <- cbind(1,x)    # Design matrix: the intercept is included
+y <- rbinom(n,1,prob = plogis(X%*%beta))
+
+set.seed(1010)     # Set the seed to make this experiment reproducible
+CAVI_output <- logit_CAVI(X = X, y = y, prior = prior) # CAVI algorithm
+SVI_output  <- logit_SVI(X = X, y = y,  prior = prior,  iter = iter, tau = tau, kappa = kappa) # SVI algorithm
+
+set.seed(100)
+beta0_CAVI <- rnorm(10^4, CAVI_output$mu[1], sqrt(CAVI_output$Sigma[1,1]))
+beta1_CAVI <- rnorm(10^4, CAVI_output$mu[2], sqrt(CAVI_output$Sigma[2,2]))
+
+beta0_SVI <- rnorm(10^4, SVI_output$mu[1], sqrt(SVI_output$Sigma[1,1]))
+beta1_SVI <- rnorm(10^4, SVI_output$mu[2], sqrt(SVI_output$Sigma[2,2]))
+
+data_plot <- rbind(data_plot,data.frame(Posterior = c(beta0_CAVI,beta1_CAVI,beta0_SVI,beta1_SVI), beta = rep(rep(c("Intercept","Slope"),each=10^4),2), Algorithm = rep(c("CAVI","SVI"),each=2*10^4), Sample_size = n))
+```
+
+
+
+### Final plot
+
+```r
+data_plot$Sample_size <- as.factor(data_plot$Sample_size)
+ggplot(data=data_plot, aes(x = Sample_size, y = Posterior, fill=Algorithm)) + facet_grid(~beta) + geom_boxplot(alpha=0.7) + theme_bw() + scale_fill_grey() + geom_hline(yintercept=1, linetype="dotted") + xlab("Sample size") + ylab("Regression Coefficient")
+```
+
 
