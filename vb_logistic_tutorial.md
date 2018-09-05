@@ -10,14 +10,31 @@ Before starting the analysis, we load in memory some useful libraries, including
 ```r
 rm(list=ls())
 source("logistic.R") # R file that can be downloaded from this github repository
-library(knitr)      # To produce "nice" table
-library(ggplot2)    # Plots
-library(reshape2)   # Reshaping data, used together with ggplot2
+library(knitr)       # To produce "nice" table
+library(ggplot2)     # Plots
+library(reshape2)    # Reshaping data, used together with ggplot2
 ```
 
 ## Comparison between CAVI and SVI algorithms
 
-We consider a simulated dataset having a binary output `y` and a single continous covariate `x`. We obtain the posterior distribution using both the Coordinate Ascent Variational Inference (CAVI) algorithm (`logit_VB` function of the `logistic` package) and the Stochastic Variational Inference (SVI) algorithm (`logit_SVI` function of the `logistic` package).
+We consider a simulated dataset having a binary output `y` and a single continous covariate `x`. We obtain the posterior distribution using both the Coordinate Ascent Variational Inference (CAVI) algorithm (`logit_VB` function) and the Stochastic Variational Inference (SVI) algorithm (`logit_SVI` function).
+
+In the following code, we set the unknown regression coefficients `beta`, as well as the prior hyperparameters. Moreover, the SVI algorithm requires the choice of some tuning parameters: the number of iterations (`maxiter`), the delay (`tau`) and the forgetting rate (`kappa`). All these parameter settings are fixed through the simulations. 
+
+```r
+# True vector of regression coefficients
+beta <- c(1, 0.5)
+
+# Prior hyperparameters
+prior <- list(mu = rep(0,2), Sigma = diag(10,2))
+
+# SVI parameter settings
+iter    <- 10^4 # Number of iterations
+tau     <- 0    # Delay parameter
+kappa   <- 0.7  # Forgetting rate parameter
+```
+
+We replicate the simulation study for different sample sizes `n`, to assess the performance of the variational approximations to concentrate around the true value `beta` as `n` increases. 
 
 ### Number of observations `n = 100`
 

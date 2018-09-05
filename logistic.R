@@ -1,4 +1,4 @@
-logit_VB <- function(x, y,  tol = 1e-16, prior, maxiter=10000){
+logit_VB <- function(x, y,prior, tol = 1e-16, maxiter=10000){
   
   if (is.null(n <- nrow(x)))
     stop("'x' must be a matrix")
@@ -51,7 +51,7 @@ logit_VB <- function(x, y,  tol = 1e-16, prior, maxiter=10000){
 }
 
 
-logit_SVB <- function(x, y,  tol = 1e-16, prior, maxiter=1000, tau=1, kappa=0.7){
+logit_SVB <- function(x, y, prior, iter, tau=1, kappa=0.7){
   
   if (is.null(n <- nrow(x)))
     stop("'x' must be a matrix")
@@ -70,7 +70,7 @@ logit_SVB <- function(x, y,  tol = 1e-16, prior, maxiter=1000, tau=1, kappa=0.7)
   Eta2_out <- Eta2
   
   # Iterative procedure
-  for(t in 1:maxiter){
+  for(t in 1:iter){
   
     # Sample the observation
     id  <- sample.int(n,1)
