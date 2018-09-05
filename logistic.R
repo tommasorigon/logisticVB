@@ -1,16 +1,16 @@
-logit_VB <- function(x, y,prior, tol = 1e-16, maxiter=10000){
+logit_CAVI <- function(X, y, prior, tol = 1e-16, maxiter=10000){
   
-  if (is.null(n <- nrow(x)))
-    stop("'x' must be a matrix")
+  if (is.null(n <- nrow(X)))
+    stop("'X' must be a matrix")
   
   # Compute the log-determinant of a matrix
-  ldet <- function(x) {
-    if(!is.matrix(x)) return(log(x))
-    determinant(x,logarithm = TRUE)$modulus
+  ldet <- function(X) {
+    if(!is.matrix(X)) return(log(X))
+    determinant(X,logarithm = TRUE)$modulus
   }
 
   lowerbound <- numeric(maxiter)
-  p          <- ncol(x)
+  p          <- ncol(X)
   
   P    <- solve(prior$Sigma)
   mu   <- prior$mu
@@ -18,11 +18,11 @@ logit_VB <- function(x, y,prior, tol = 1e-16, maxiter=10000){
   Pdet <- ldet(P)
   
   # Initialization for omega equal to 0.25
-  P_vb       <- crossprod(x*rep(1/4,n),x) + P
+  P_vb       <- crossprod(X*rep(1/4,n),X) + P
   Sigma_vb   <- solve(P_vb) 
-  mu_vb      <- Sigma_vb %*% (crossprod(x,y - 0.5) + Pmu)
-  eta        <- c(x%*%mu_vb)
-  xi         <- sqrt(eta^2 +  rowSums(x %*% Sigma_vb * x))
+  mu_vb      <- Sigma_vb %*% (crossprod(X,y - 0.5) + Pmu)
+  eta        <- c(X%*%mu_vb)
+  xi         <- sqrt(eta^2 +  rowSums(X %*% Sigma_vb * X))
   omega      <- tanh(xi/2)/(2*xi); 
   omega[is.nan(omega)] <- 0.25
   
@@ -31,19 +31,19 @@ logit_VB <- function(x, y,prior, tol = 1e-16, maxiter=10000){
   # Iterative procedure
   for(t in 2:maxiter){
   
-    P_vb       <- crossprod(x*omega,x) + P
+    P_vb       <- crossprod(X*omega,X) + P
     Sigma_vb   <- solve(P_vb) 
-    mu_vb      <- Sigma_vb %*% (crossprod(x,y-0.5) + Pmu)
+    mu_vb      <- Sigma_vb %*% (crossprod(X,y-0.5) + Pmu)
     
     #Update of xi
-    eta        <- c(x%*%mu_vb)
-    xi         <- sqrt(eta^2 +  rowSums(x %*% Sigma_vb * x))
+    eta        <- c(X%*%mu_vb)
+    xi         <- sqrt(eta^2 +  rowSums(X %*% Sigma_vb * X))
     omega      <- tanh(xi/2)/(2*xi); 
     omega[is.nan(omega)] <- 0.25
     
     lowerbound[t]  <- -0.5*p + 0.5*ldet(Sigma_vb) + 0.5*Pdet - 0.5*t(mu_vb - mu)%*%P%*%(mu_vb - mu) + sum((y-0.5)*eta +log(plogis(xi)) - 0.5*xi) - 0.5*sum(diag(P %*% Sigma_vb))
     
-    if(abs(lowerbound[t] - lowerbound[t-1]) < tol) return(list(mu=mu_vb, Sigma=Sigma_vb, 
+    if(abs(lowerbound[t] - lowerbound[t-1]) < tol) return(list(mu = matrix(mu_vb,p,1), Sigma=matrix(Sigma_vb,p,p), 
                                                                Convergence=cbind(Iteration=(1:t)-1, 
                                                                                  Lowerbound=lowerbound[1:t]), xi=xi))
   }
@@ -51,12 +51,12 @@ logit_VB <- function(x, y,prior, tol = 1e-16, maxiter=10000){
 }
 
 
-logit_SVB <- function(x, y, prior, iter, tau=1, kappa=0.7){
+logit_SVI <- function(X, y, prior, iter, tau, kappa){
   
-  if (is.null(n <- nrow(x)))
-    stop("'x' must be a matrix")
+  if (is.null(n <- nrow(X)))
+    stop("'X' must be a matrix")
   
-  p          <- ncol(x)
+  p          <- ncol(X)
 
   P    <- solve(prior$Sigma)
   mu   <- prior$mu
@@ -74,7 +74,7 @@ logit_SVB <- function(x, y, prior, iter, tau=1, kappa=0.7){
   
     # Sample the observation
     id  <- sample.int(n,1)
-    x_i <- x[id,]
+    x_i <- X[id,]
     y_i <- y[id]
     
     # Update the local parameter
@@ -95,8 +95,8 @@ logit_SVB <- function(x, y, prior, iter, tau=1, kappa=0.7){
   }
   
   # Output
-  Sigma_vb   <- solve(Eta2_out) 
-  mu_vb      <- Sigma_vb%*%Eta1_out
+  Sigma_vb   <- matrix(solve(Eta2_out),p,p)
+  mu_vb      <- matrix(Sigma_vb%*%Eta1_out,p,1)
   
   return(list(mu=mu_vb,Sigma=Sigma_vb))
 }
