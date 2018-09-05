@@ -59,7 +59,6 @@ Finally, we simulate posterior draws from the CAVI variational distribution from
 set.seed(100)
 beta0_CAVI <- rnorm(10^4, CAVI_output$mu[1], sqrt(CAVI_output$Sigma[1,1]))
 beta1_CAVI <- rnorm(10^4, CAVI_output$mu[2], sqrt(CAVI_output$Sigma[2,2]))
-
 beta0_SVI <- rnorm(10^4, SVI_output$mu[1], sqrt(SVI_output$Sigma[1,1]))
 beta1_SVI <- rnorm(10^4, SVI_output$mu[2], sqrt(SVI_output$Sigma[2,2]))
 
@@ -85,7 +84,6 @@ SVI_output  <- logit_SVI(X = X, y = y,  prior = prior,  iter = iter, tau = tau, 
 set.seed(100)
 beta0_CAVI <- rnorm(10^4, CAVI_output$mu[1], sqrt(CAVI_output$Sigma[1,1]))
 beta1_CAVI <- rnorm(10^4, CAVI_output$mu[2], sqrt(CAVI_output$Sigma[2,2]))
-
 beta0_SVI <- rnorm(10^4, SVI_output$mu[1], sqrt(SVI_output$Sigma[1,1]))
 beta1_SVI <- rnorm(10^4, SVI_output$mu[2], sqrt(SVI_output$Sigma[2,2]))
 
@@ -107,7 +105,6 @@ SVI_output  <- logit_SVI(X = X, y = y,  prior = prior,  iter = iter, tau = tau, 
 set.seed(100)
 beta0_CAVI <- rnorm(10^4, CAVI_output$mu[1], sqrt(CAVI_output$Sigma[1,1]))
 beta1_CAVI <- rnorm(10^4, CAVI_output$mu[2], sqrt(CAVI_output$Sigma[2,2]))
-
 beta0_SVI <- rnorm(10^4, SVI_output$mu[1], sqrt(SVI_output$Sigma[1,1]))
 beta1_SVI <- rnorm(10^4, SVI_output$mu[2], sqrt(SVI_output$Sigma[2,2]))
 
@@ -129,7 +126,6 @@ SVI_output  <- logit_SVI(X = X, y = y,  prior = prior,  iter = iter, tau = tau, 
 set.seed(100)
 beta0_CAVI <- rnorm(10^4, CAVI_output$mu[1], sqrt(CAVI_output$Sigma[1,1]))
 beta1_CAVI <- rnorm(10^4, CAVI_output$mu[2], sqrt(CAVI_output$Sigma[2,2]))
-
 beta0_SVI <- rnorm(10^4, SVI_output$mu[1], sqrt(SVI_output$Sigma[1,1]))
 beta1_SVI <- rnorm(10^4, SVI_output$mu[2], sqrt(SVI_output$Sigma[2,2]))
 
@@ -142,8 +138,8 @@ The following code produce the plot included in the paper
 
 ```r
 ggplot(data=data_plot, aes(x = as.factor(Sample_size), y = Posterior, fill=Algorithm)) + facet_grid(~beta) + geom_boxplot(alpha=0.7) + theme_bw() + scale_fill_grey() + geom_hline(yintercept=1, linetype="dotted") + xlab("Sample size") + ylab("Regression Coefficient")
-ggsave("final_plot.png", width=10,height=5)
-ggsave("final_plot.pdf", width=10,height=5)
+ggsave("final_plot.png", width=9,height=4)
+ggsave("final_plot.pdf", width=9,height=4)
 ```
 
 ![](https://raw.githubusercontent.com/tommasorigon/logisticVB/master/final_plot.png)
