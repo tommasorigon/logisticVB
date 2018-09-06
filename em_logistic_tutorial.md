@@ -71,7 +71,7 @@ coef(glm(y~X[,-1],family="binomial"))
 
 ## Empirical convergence rate of the MM and EM algorithms
 
-In this Section we empirically check that the convergence rate of the EM based on the Polya-gamma distribution has a faster convergence rate compared to the MM approach of Böhning. To this extent, we consider the following simulated dataset, with a a sample size `n = 10000` and several covariates.
+In this paragraph we empirically check that the convergence rate of the EM based on the Polya-gamma distribution has a faster convergence rate compared to the MM approach of Böhning. To this extent, we consider the following simulated dataset, with a a sample size `n = 10000` and several covariates.
 
 ```r
 n <- 10000 # Setting the sample size
