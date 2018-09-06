@@ -1,3 +1,7 @@
+# ----------------------------------------------------------------------------
+# Variational inference for Bayesian logistic regression using CAVI algorithm
+# ----------------------------------------------------------------------------
+
 logit_CAVI <- function(X, y, prior, tol = 1e-16, maxiter=10000){
   
   if (is.null(n <- nrow(X)))
@@ -50,6 +54,10 @@ logit_CAVI <- function(X, y, prior, tol = 1e-16, maxiter=10000){
   stop("The algorithm has not reached convergence")
 }
 
+# ------------------------------------------------------------------
+# Variational inference for Bayesian logistic regression using SVI algorithm
+# ------------------------------------------------------------------
+
 logit_SVI <- function(X, y, prior, iter, tau, kappa){
   
   if (is.null(n <- nrow(X)))
@@ -100,6 +108,10 @@ logit_SVI <- function(X, y, prior, iter, tau, kappa){
   return(list(mu=mu_vb,Sigma=Sigma_vb))
 }
 
+# -------------------------------------------------------------------
+# Maximum likelihood for the logistic regression using Newton-Raphson
+# -------------------------------------------------------------------
+
 logit_NR <- function(X, y,  tol = 1e-16, beta_start = NULL, maxiter=10000){
   
   if (is.null(n <- nrow(X)))
@@ -124,12 +136,15 @@ logit_NR <- function(X, y,  tol = 1e-16, beta_start = NULL, maxiter=10000){
     prob       <- 1/(1+exp(-eta))
     w          <- prob*(1-prob)
     loglik[t]  <- sum(y*eta - log(1+exp(eta)))
-    if(loglik[t] - loglik[t-1] < tol) return(list(beta=beta,vcov=solve(crossprod(X*w,X)),
-                                                  Convergence=cbind(Iteration=(1:t)-1,
+    if(loglik[t] - loglik[t-1] < tol) return(list(beta=beta, Convergence=cbind(Iteration=(1:t)-1,
                                                                     Loglikelihood=loglik[1:t])))
   }
   stop("The algorithm has not reached convergence")
 }
+
+# -------------------------------------------------------------------
+# Maximum likelihood for the logistic regression using Polya-gamma EM
+# -------------------------------------------------------------------
 
 logit_EM <- function(X, y,  tol = 1e-16, beta_start = NULL, maxiter=10000){
   
@@ -159,10 +174,14 @@ logit_EM <- function(X, y,  tol = 1e-16, beta_start = NULL, maxiter=10000){
     w[is.nan(w)] <- 0.25
 
     loglik[t]  <- sum(y*eta - log(1+exp(eta)))
-    if(loglik[t] - loglik[t-1] < tol) return(list(beta=beta,Convergence=cbind(Iteration=(1:t)-1,Loglikelihood=loglik[1:t])))
+    if(loglik[t] - loglik[t-1] < tol) return(list(beta=beta, Convergence=cbind(Iteration=(1:t)-1,Loglikelihood=loglik[1:t])))
   }
   stop("The algorithm has not reached convergence")
 }
+
+# -------------------------------------------------------------------
+# Maximum likelihood for the logistic regression using Bohning bound
+# -------------------------------------------------------------------
 
 logit_MM <- function(X, y,  tol = 1e-16, beta_start = NULL, maxiter=10000){
   

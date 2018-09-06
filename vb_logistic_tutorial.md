@@ -138,9 +138,9 @@ The following code produce the plot included in the paper
 
 ```r
 ggplot(data=data_plot, aes(x = as.factor(Sample_size), y = Posterior, fill=Algorithm)) + facet_grid(~beta) + geom_boxplot(alpha=0.7) + theme_bw() + scale_fill_grey() + geom_hline(yintercept=1, linetype="dotted") + xlab("Sample size") + ylab("Regression Coefficient")
-ggsave("final_plot.png", width=9,height=4)
-ggsave("final_plot.pdf", width=9,height=4)
+ggsave("img/CAVI_vs_SVI.png", width=9,height=4)
+ggsave("img/CAVI_vs_SVI.pdf", width=9,height=4)
 ```
 
-![](https://raw.githubusercontent.com/tommasorigon/logisticVB/master/final_plot.png)
+![](https://raw.githubusercontent.com/tommasorigon/logisticVB/master/img/CAVI_vs_SVI.png)
 
