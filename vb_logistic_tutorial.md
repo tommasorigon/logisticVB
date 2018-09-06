@@ -35,7 +35,7 @@ We replicate the simulation study for different sample sizes `n`, to empirically
 
 ### Sample size `n = 20`
 
-We conduct the simulation for `n = 20`. The covariate `x` is randomly generated, taking uniform values over the space `(-2,2)`. The `y` values are simulated according to a logistc model.
+We conduct the simulation for `n = 20`. The covariate `x` is randomly generated, taking uniform values over the space `(-2,2)`. The `y` values are simulated according to a logistc model. We refer to the constant value of the design matrix `X` as the **intercept** whereas we will call the covariate `x` the **slope**.
 
 ```r
 n <- 20 # Setting the sample size
