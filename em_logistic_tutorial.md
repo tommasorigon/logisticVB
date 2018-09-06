@@ -2,7 +2,7 @@ This document is associated to the paper [Durante and Rigon (2017). *Conditional
 
 All the analyses are performed with a **MacBook Air (OS X Sierra, version 10.13.6)**, using a R version **3.5.0**. 
 
-Before starting the analysis, we load in memory the file [`functions.R`](https://github.com/tommasorigon/logisticVB/blob/master/logistic.R), the `ggplot2` and the `knitr` libraries.
+Before starting the analysis, we load in memory the file [`functions.R`](https://github.com/tommasorigon/logisticVB/blob/master/logistic.R), as well as the `ggplot2` and the `knitr` libraries.
 
 ```r
 rm(list=ls())
@@ -13,14 +13,14 @@ library(knitr)       # To produce tables
 
 ## Failure of the Newton-Raphson algorithm in logistic regression
 
-The aim of this paragraph is to show that the Newton-Raphson algorithm, sometimes called Fisher scoring, can fail even if the maximum lieklihood estimate is well defined. We consider the following dataset having a binary output `y` and continous covariate. 
+The aim of this paragraph is to show that the Newton-Raphson algorithm, sometimes called also "Fisher scoring", can fail even though the maximum likelihood estimate (MLE) is well defined. To clarify, this problem is **not** related to the so-called *separability issue*: in the latter case, the MLE simply does not exists. We consider the following dataset having a binary output `y` and continous covariate. 
 
 ```r
 y <- c(rep(0,50),1,rep(0,50),0,rep(0,5),rep(1,10))        # Binary outcomes
 X <- cbind(1,c(rep(0,50),0,rep(0.001,50),100,rep(-1,15))) # Design matrix
 ```
 
-The maximum likelihood estimate exists and it is well defined. However, the Newton-Raphson algorithm **diverges** after few iterations.  We compare the Newton-Raphson algorithm (`logit_NR` function) with two other algorithms: the EM based on the Polya-Gamma data augmentation (`logit_EM` function) and the MM of [Böhning and Lindsay (1988)](https://link.springer.com/article/10.1007/BF00049423) (`logit_MM` function). The MM and the EM are **monotone** in the sense that they theoretically guarantee that the log-likelihood increases at each iteration.
+The maximum likelihood estimate exists and it is well defined. However, the Newton-Raphson algorithm **diverges** after few iterations.  We compare the Newton-Raphson algorithm (`logit_NR` function) with two other algorithms: the EM based on the Polya-Gamma data augmentation (`logit_EM` function) and the MM of [Böhning and Lindsay (1988)](https://link.springer.com/article/10.1007/BF00049423) (`logit_MM` function). The MM and the EM algorithms are **monotone** in the sense that they theoretically guarantee that the log-likelihood increases at each iteration. This is not the case for the Newton-Raphson, which indeed might fall.
 
 We initialize the three algorithms in (0,0), which is the typical choice in standard statistical packages. This can be done by setting `beta_start = c(0,0)`. 
 
@@ -32,7 +32,7 @@ fit_MM <- logit_MM(X,y,beta_start=c(0,0), maxiter=10^5) # Böhning and Lindsay (
 
 For this specific dataset, the maximum values is attained when the beta coefficients are equal to `(-4.603,-5.296)` whereas the log-likelihood, evaluated in the maximum, is equal to `-15.156`.
 
-The MM algorithm requires the huge number of  `41'397` iterations to reach convergence. As expected, the EM algorithm reaches the maximum more rapidly, requiring only `361` iterations. This is not surprising, since the EM algorithm has a faster rate of convergence compared to the MM, as illustrated in the paper. This aspect is also illustrated more in depth in the next paragraph.
+The MM algorithm requires the very large number of  `41'397` iterations to reach convergence. As expected, the EM algorithm reaches the maximum more rapidly, requiring only `361` iterations. This is not surprising, since the EM algorithm has a faster rate of convergence compared to the MM, as illustrated in the paper. This aspect is also illustrated more in depth in the next paragraph.
 
 Conversely, the Newton-Raphson algorithm fails to reach the global maximum. To illustrate the behaviour of these three algoritms, we show in the following table the value of the log-likelihood of the first 5 iterations.
 
@@ -90,7 +90,7 @@ fit_EM <- logit_EM(X,y) # EM via Polya-gamma
 fit_MM <- logit_MM(X,y) # Böhning and Lindsay (1988)
 ```
 
-For this specific dataset, the log-likelihood evaluated in the maximum is equal to `-3571.163`. The MM algorithm requires `132` iterations to reach convergence whereas the EM algorithm reaches the maximum more rapidly, requiring `60` iterations. To provide a graphical representation of the increased rate of convergence, we display the value of the log-likelihood as a function of the iterations.
+For this specific dataset, the log-likelihood evaluated in the maximum is equal to `-3571.163`. The MM algorithm requires `132` iterations to reach convergence whereas the EM algorithm reaches the maximum more rapidly, requiring `60` iterations. To provide a graphical representation of the increased rate of convergence, we display the first `20` values of the log-likelihood as a function of the iterations.
 
 ```r
 iters <- 20
