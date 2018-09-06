@@ -13,7 +13,7 @@ library(knitr)       # To produce tables
 
 ## Failure of the Newton-Raphson algorithm in logistic regression
 
-The aim of this paragraph is to show that the Newton-Raphson algorithm, sometimes called also "Fisher scoring", can fail even though the maximum likelihood estimate (MLE) is well defined. To clarify, this problem is **not** related to the so-called *separability issue*: in the latter case, the MLE simply does not exists. We consider the following dataset having a binary output `y` and continous covariate. 
+The aim of this paragraph is to show that the Newton-Raphson algorithm for logistic regression, sometimes called also "Fisher scoring", can fail even though the maximum likelihood estimate (MLE) is well defined. To clarify, this problem is **not** related to the so-called *separability issue*: in the latter case, the MLE simply does not exists. We consider the following dataset having a binary output `y` and continous covariate. 
 
 ```r
 y <- c(rep(0,50),1,rep(0,50),0,rep(0,5),rep(1,10))        # Binary outcomes
