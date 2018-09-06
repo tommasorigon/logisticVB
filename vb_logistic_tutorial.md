@@ -1,6 +1,6 @@
 
 
-This document aim to reproduce the simulation study of the paper [Durante and Rigon (2017). *Conditionally conjugate variational Bayes in logistic models*](https://arxiv.org/abs/1711.06999). The core functions of our implementations are made available in the file [`functions.R`](https://github.com/tommasorigon/logisticVB/blob/master/logistic.R), which can be downloaded from this repository.
+This document aim to reproduce the simulation study of the paper [Durante and Rigon (2017). *Conditionally conjugate variational Bayes in logistic models*](https://arxiv.org/abs/1711.06999). The core functions of our implementations are made available in the R file [`functions.R`](https://github.com/tommasorigon/logisticVB/blob/master/logistic.R), which can be downloaded from this repository.
 
 All the analyses are performed with a **MacBook Air (OS X Sierra, version 10.13.6)**, using a R version **3.5.0**. 
 
@@ -14,9 +14,9 @@ library(ggplot2)     # Plots
 
 ## Comparison between CAVI and SVI algorithms
 
-We consider a simulated dataset having a binary output `y` and a single continuous covariate `x`. We obtain the posterior distribution using both the Coordinate Ascent Variational Inference (CAVI) algorithm (`logit_CAVI` function) and the Stochastic Variational Inference (SVI) algorithm (`logit_SVI` function).
+We consider a simulated dataset having a binary output `y` and a single continuous covariate `x`. We obtain the posterior distribution using both the **Coordinate Ascent Variational Inference** (CAVI) algorithm (`logit_CAVI` function) and the **Stochastic Variational Inference** (SVI) algorithm (`logit_SVI` function).
 
-In the following code, we set both the unknown regression coefficients `beta` equal to one. Moreover, we select fairly uninformative prior hyperparameters. Finally, the SVI algorithm requires the choice of some tuning parameters: the number of iterations (`iter`), the delay (`tau`) and the forgetting rate (`kappa`), which are all set in the code below. All these parameters are fixed through the simulations. 
+In the following code, we set both the unknown regression coefficients `beta` to be equal to one. Moreover, we select fairly non-informative prior hyperparameters. Finally, the SVI algorithm requires the choice of some tuning parameters: the number of iterations (`iter`), the delay (`tau`) and the forgetting rate (`kappa`), which are all set in the code below. All these parameters are fixed through the simulations. 
 
 ```r
 # True vector of regression coefficients
@@ -31,11 +31,11 @@ tau     <- 1    # Delay parameter
 kappa   <- 0.75  # Forgetting rate parameter
 ```
 
-We replicate the simulation study for different sample sizes `n`, to empirically check whethee the variational approximations concentrate around the true value `beta`, as `n` increases. 
+We replicate the simulation study for different sample sizes `n`, to empirically check whether the variational approximations concentrate around the true value `beta`, as `n` increases. 
 
 ### Sample size `n = 20`
 
-We conduct the simulation for `n = 20`. The covariate `x` is randomly generated taking uniform values over the space (-2,2).
+We conduct the simulation for `n = 20`. The covariate `x` is randomly generated, taking uniform values over the space `(-2,2)`. The `y` values are simulated according to a logistc model.
 
 ```r
 n <- 20 # Setting the sample size
@@ -45,7 +45,7 @@ x <- runif(n,-2,2) # Generating the covariate space
 X <- cbind(1,x)    # Design matrix: the intercept is included
 y <- rbinom(n,1,prob = plogis(X%*%beta))
 ```
-As anticipated, the CAVI algorithm is performed using the `logit_CAVI` function, whereas the SVI algorithm is performed using the `logit_SVI` function. In both cases, the final solution is obtained quite rapidly.
+As anticipated, the CAVI algorithm is performed using the `logit_CAVI` function, whereas the SVI algorithm is performed using the `logit_SVI` function, both present in the file [`functions.R`](https://github.com/tommasorigon/logisticVB/blob/master/logistic.R). In both cases, the final solution is obtained quite rapidly.
 
 ```r
 set.seed(1010)     # Set the seed to make this experiment reproducible
@@ -53,88 +53,48 @@ CAVI_output <- logit_CAVI(X = X, y = y, prior = prior) # CAVI algorithm
 SVI_output  <- logit_SVI(X = X, y = y,  prior = prior,  iter = iter, tau = tau, kappa = kappa) # SVI algorithm
 ```
 
-Finally, we simulate posterior draws from the CAVI variational distribution from the SVI variational distribution. These values will be used to construct the final plot.
+Finally, we simulate posterior draws from the CAVI variational distribution from the SVI variational distribution. These posterior draws will be used to construct a graphical representation of our simulation study.
 
 ```r
 set.seed(100)
-beta0_CAVI <- rnorm(10^4, CAVI_output$mu[1], sqrt(CAVI_output$Sigma[1,1]))
-beta1_CAVI <- rnorm(10^4, CAVI_output$mu[2], sqrt(CAVI_output$Sigma[2,2]))
-beta0_SVI  <- rnorm(10^4, SVI_output$mu[1], sqrt(SVI_output$Sigma[1,1]))
-beta1_SVI  <- rnorm(10^4, SVI_output$mu[2], sqrt(SVI_output$Sigma[2,2]))
+beta0_CAVI <- rnorm(10^4, CAVI_output$mu[1], sqrt(CAVI_output$Sigma[1,1])) # Posterior distribution of the intercept with CAVI
+beta1_CAVI <- rnorm(10^4, CAVI_output$mu[2], sqrt(CAVI_output$Sigma[2,2])) # Posterior distribution of the slope with CAVI
+beta0_SVI  <- rnorm(10^4, SVI_output$mu[1], sqrt(SVI_output$Sigma[1,1]))   # Posterior distribution of the intercept with SVI
+beta1_SVI  <- rnorm(10^4, SVI_output$mu[2], sqrt(SVI_output$Sigma[2,2]))   # Posterior distribution of the slope with SVI
 
 data_plot <- data.frame(Posterior = c(beta0_CAVI,beta1_CAVI,beta0_SVI,beta1_SVI), beta = rep(rep(c("Intercept","Slope"),each=10^4),2), Algorithm = rep(c("CAVI","SVI"),each=2*10^4), Sample_size = n)
 ```
 
 ### Sample size `n = 100`, `n = 1'000` and `n = 10'000`.
 
-The same simulation study is conducted other 3 times with different sample sizes, namely `n = 100`, `n = 1'000` and `n = 10'000`. Beside that, the code is exactly the same as in the previous step.
+The same simulation study is conducted other 3 times with different sample sizes, namely `n = 100`, `n = 1000` and `n = 10000`. Beside that, the code is exactly the same as in the previous step, and therefore it is not furtherly commented.
 
 ```r
-n <- 100 # Setting the sample size
+nn <- c(100,1000,10000) # Setting the sample size
 
-set.seed(123)     # Set the seed to make this experiment reproducible
-x <- runif(n,-2,2) # Generating the covariate space
-X <- cbind(1,x)    # Design matrix: the intercept is included
-y <- rbinom(n,1,prob = plogis(X%*%beta))
+for(n in nn){
+  set.seed(123)     # Set the seed to make this experiment reproducible
+  x <- runif(n,-2,2) # Generating the covariate space
+  X <- cbind(1,x)    # Design matrix: the intercept is included
+  y <- rbinom(n,1,prob = plogis(X%*%beta))
 
-set.seed(1010)     # Set the seed to make this experiment reproducible
-CAVI_output <- logit_CAVI(X = X, y = y, prior = prior) # CAVI algorithm
-SVI_output  <- logit_SVI(X = X, y = y,  prior = prior,  iter = iter, tau = tau, kappa = kappa) # SVI algorithm
+  set.seed(1010)     # Set the seed to make this experiment reproducible
+  CAVI_output <- logit_CAVI(X = X, y = y, prior = prior) # CAVI algorithm
+  SVI_output  <- logit_SVI(X = X, y = y,  prior = prior,  iter = iter, tau = tau, kappa = kappa) # SVI algorithm
 
-set.seed(100)
-beta0_CAVI <- rnorm(10^4, CAVI_output$mu[1], sqrt(CAVI_output$Sigma[1,1]))
-beta1_CAVI <- rnorm(10^4, CAVI_output$mu[2], sqrt(CAVI_output$Sigma[2,2]))
-beta0_SVI  <- rnorm(10^4, SVI_output$mu[1], sqrt(SVI_output$Sigma[1,1]))
-beta1_SVI  <- rnorm(10^4, SVI_output$mu[2], sqrt(SVI_output$Sigma[2,2]))
+  set.seed(100)
+  beta0_CAVI <- rnorm(10^4, CAVI_output$mu[1], sqrt(CAVI_output$Sigma[1,1])) # Posterior distribution of the intercept with CAVI
+  beta1_CAVI <- rnorm(10^4, CAVI_output$mu[2], sqrt(CAVI_output$Sigma[2,2])) # Posterior distribution of the slope with CAVI
+  beta0_SVI  <- rnorm(10^4, SVI_output$mu[1], sqrt(SVI_output$Sigma[1,1]))   # Posterior distribution of the intercept with SVI
+  beta1_SVI  <- rnorm(10^4, SVI_output$mu[2], sqrt(SVI_output$Sigma[2,2]))   # Posterior distribution of the slope with SVI
 
-data_plot <- rbind(data_plot,data.frame(Posterior = c(beta0_CAVI,beta1_CAVI,beta0_SVI,beta1_SVI), beta = rep(rep(c("Intercept","Slope"),each=10^4),2), Algorithm = rep(c("CAVI","SVI"),each=2*10^4), Sample_size = n))
+  data_plot <- rbind(data_plot,data.frame(Posterior = c(beta0_CAVI,beta1_CAVI,beta0_SVI,beta1_SVI), beta = rep(rep(c("Intercept","Slope"),each=10^4),2), Algorithm =    rep(c("CAVI","SVI"),each=2*10^4), Sample_size = n))
+}
 ```
 
-```r
-n <- 1000 # Setting the sample size
+### Results
 
-set.seed(123)     # Set the seed to make this experiment reproducible
-x <- runif(n,-2,2) # Generating the covariate space
-X <- cbind(1,x)    # Design matrix: the intercept is included
-y <- rbinom(n,1,prob = plogis(X%*%beta))
-
-set.seed(1010)     # Set the seed to make this experiment reproducible
-CAVI_output <- logit_CAVI(X = X, y = y, prior = prior) # CAVI algorithm
-SVI_output  <- logit_SVI(X = X, y = y,  prior = prior,  iter = iter, tau = tau, kappa = kappa) # SVI algorithm
-
-set.seed(100)
-beta0_CAVI <- rnorm(10^4, CAVI_output$mu[1], sqrt(CAVI_output$Sigma[1,1]))
-beta1_CAVI <- rnorm(10^4, CAVI_output$mu[2], sqrt(CAVI_output$Sigma[2,2]))
-beta0_SVI  <- rnorm(10^4, SVI_output$mu[1], sqrt(SVI_output$Sigma[1,1]))
-beta1_SVI  <- rnorm(10^4, SVI_output$mu[2], sqrt(SVI_output$Sigma[2,2]))
-
-data_plot <- rbind(data_plot,data.frame(Posterior = c(beta0_CAVI,beta1_CAVI,beta0_SVI,beta1_SVI), beta = rep(rep(c("Intercept","Slope"),each=10^4),2), Algorithm = rep(c("CAVI","SVI"),each=2*10^4), Sample_size = n))
-```
-
-```r
-n <- 10000 # Setting the sample size
-
-set.seed(123)     # Set the seed to make this experiment reproducible
-x <- runif(n,-2,2) # Generating the covariate space
-X <- cbind(1,x)    # Design matrix: the intercept is included
-y <- rbinom(n,1,prob = plogis(X%*%beta))
-
-set.seed(1010)     # Set the seed to make this experiment reproducible
-CAVI_output <- logit_CAVI(X = X, y = y, prior = prior) # CAVI algorithm
-SVI_output  <- logit_SVI(X = X, y = y,  prior = prior,  iter = iter, tau = tau, kappa = kappa) # SVI algorithm
-
-set.seed(100)
-beta0_CAVI <- rnorm(10^4, CAVI_output$mu[1], sqrt(CAVI_output$Sigma[1,1]))
-beta1_CAVI <- rnorm(10^4, CAVI_output$mu[2], sqrt(CAVI_output$Sigma[2,2]))
-beta0_SVI  <- rnorm(10^4, SVI_output$mu[1], sqrt(SVI_output$Sigma[1,1]))
-beta1_SVI  <- rnorm(10^4, SVI_output$mu[2], sqrt(SVI_output$Sigma[2,2]))
-
-data_plot <- rbind(data_plot,data.frame(Posterior = c(beta0_CAVI,beta1_CAVI,beta0_SVI,beta1_SVI), beta = rep(rep(c("Intercept","Slope"),each=10^4),2), Algorithm = rep(c("CAVI","SVI"),each=2*10^4), Sample_size = n))
-```
-
-### Final plot
-
-The following code produce the plot included in the paper
+The following code produce the plot included in the paper. 
 
 ```r
 ggplot(data=data_plot, aes(x = as.factor(Sample_size), y = Posterior, fill=Algorithm)) + facet_grid(~beta) + geom_boxplot(alpha=0.7) + theme_bw() + scale_fill_grey() + geom_hline(yintercept=1, linetype="dotted") + xlab("Sample size") + ylab("Regression Coefficient")
@@ -144,3 +104,4 @@ ggsave("img/CAVI_vs_SVI.pdf", width=9,height=4)
 
 ![](https://raw.githubusercontent.com/tommasorigon/logisticVB/master/img/CAVI_vs_SVI.png)
 
+As apparent from the plot above, both the CAVI and the SVI nicely converge to the true values `(1,1)` as the sample size increases. As one would expect, the posterior variability decreases as more data are collected. However, especially for large sample sizes, there might be some differences between the CAVI and the SVI algorithm.
