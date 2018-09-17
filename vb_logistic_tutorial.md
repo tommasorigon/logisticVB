@@ -12,7 +12,7 @@ library(ggplot2)     # Plots
 
 ## Comparison between CAVI and SVI algorithms
 
-We consider an illustrative dataset having binary response `y` simulated from a logistic regression with an intercept term and a single continuous covariate `x`. In simulating the response data, we set both the **intercept** and the **slope**, comprising the coefficients vector `beta`, equal to 1. The values of the covariate `x` is instead simulated uniformly in the interval `(-2,2)`.
+We consider an illustrative dataset having a binary response `y` simulated from a logistic regression with an intercept term and a single continuous covariate `x`. In simulating the response data, we set both the **intercept** and the **slope**, comprising the coefficients vector `beta`, equal to 1. The values of the covariate `x` is instead simulated uniformly in the interval `(-2,2)`.
 
 We approximate the posterior distribution via **Coordinate Ascent Variational Inference** (CAVI) (see `logit_CAVI` function) and **Stochastic Variational Inference** (SVI) (see `logit_SVI` function), considering a moderately diffuse Gaussian prior for the regression coefficients, as outlined in Section 3 of the paper. According to Section 3.2 in the articole, the implementation of SVI requires also the choice of the number of iterations `iter`, the delay `tau` and the forgetting rate `kappa`, which are pre-specified in the code below. 
 
