@@ -1,6 +1,6 @@
 
 
-This tutorial reproduces the illustrative simulation study in Section 3 of the paper [Durante and Rigon (2013). *Conditionally conjugate variational Bayes in logistic models*](https://arxiv.org/abs/1711.06999). The core functions of our implementations are made available in the R file [`logistic.R`](https://github.com/tommasorigon/logisticVB/blob/master/logistic.R), which can be downloaded from this repository. All the analyses are performed with a **MacBook Air (OS X Sierra, version 10.13.6)**, using an `R` version **3.5.0**. 
+This tutorial reproduces the illustrative simulation study in Section 3 of the paper [Durante and Rigon (2018). *Conditionally conjugate variational Bayes in logistic models*](https://arxiv.org/abs/1711.06999). The core functions of our implementations are made available in the R file [`logistic.R`](https://github.com/tommasorigon/logisticVB/blob/master/logistic.R), which can be downloaded from this repository. All the analyses are performed with a **MacBook Air (OS X Sierra, version 10.13.6)**, using an `R` version **3.5.0**. 
 
 As a first step, let us load in memory the file [`logistic.R`](https://github.com/tommasorigon/logisticVB/blob/master/logistic.R) and the `ggplot2` library.
 
@@ -14,7 +14,7 @@ library(ggplot2)     # Plots
 
 We consider an illustrative dataset having a binary responses `y` simulated from a logistic regression with an intercept term and a single continuous covariate `x`. In simulating the response data, we set both the **intercept** and the **slope**, comprising the coefficients vector `beta`, equal to 1. The values of the covariate `x` is instead simulated uniformly in the interval `(-2,2)`.
 
-We approximate the posterior distribution via **Coordinate Ascent Variational Inference** (CAVI) (see `logit_CAVI` function) and **Stochastic Variational Inference** (SVI) (see `logit_SVI` function), considering a moderately diffuse Gaussian prior for the regression coefficients, as outlined in Section 3 of the paper. According to Section 3.2 in the articole, the implementation of SVI requires also the choice of the number of iterations (`iter`), the delay (`tau`) and the forgetting rate (`kappa`), which are all set in the code below. 
+We approximate the posterior distribution via **Coordinate Ascent Variational Inference** (CAVI) (see `logit_CAVI` function) and **Stochastic Variational Inference** (SVI) (see `logit_SVI` function), considering a moderately diffuse Gaussian prior for the regression coefficients, as outlined in Section 3 of the paper. According to Section 3.2 in the articole, the implementation of SVI requires also the choice of the number of iterations `iter`, the delay `tau` and the forgetting rate `kappa`, which are pre-specified in the code below. 
 
 ```r
 # True vector of regression coefficients
@@ -38,12 +38,12 @@ We conduct an initial simulation with `n = 20`. Let us first simulate the data, 
 ```r
 n <- 20 # Setting the sample size
 
-set.seed(123)     # Set the seed to make this experiment reproducible
-x <- runif(n,-2,2) # Generating the covariate space
+set.seed(123)      # Set the seed to make this experiment reproducible
+x <- runif(n,-2,2) # Generating the covariates
 X <- cbind(1,x)    # Design matrix: the intercept is included
 y <- rbinom(n,1,prob = plogis(X%*%beta))
 ```
-As anticipated, the CAVI algorithm is performed using the `logit_CAVI` function, whereas the SVI algorithm is performed using the `logit_SVI` function, both present in the file [`logistic.R`](https://github.com/tommasorigon/logisticVB/blob/master/logistic.R). In both cases, the final solution is obtained rapidly.
+As anticipated, the **CAVI** algorithm is performed using the `logit_CAVI` function, whereas the **SVI** algorithm is performed using the `logit_SVI` function, both present in the file [`logistic.R`](https://github.com/tommasorigon/logisticVB/blob/master/logistic.R). In both cases, the final solution is obtained rapidly.
 
 ```r
 set.seed(1010)     # Set the seed to make this experiment reproducible
@@ -51,7 +51,7 @@ CAVI_output <- logit_CAVI(X = X, y = y, prior = prior) # CAVI algorithm
 SVI_output  <- logit_SVI(X = X, y = y,  prior = prior,  iter = iter, tau = tau, kappa = kappa) # SVI algorithm
 ```
 
-Finally, we simulate posterior samples from the Gaussian approximating posteriors arising from CAVI and SVI optimizations. These samples will be used to compare the approximating distributions from the two algorithms.
+Finally, we simulate posterior samples from the Gaussian approximating posteriors arising from CAVI and SVI optimizations. These samples are useful to compare the approximating distributions from the two algorithms.
 
 ```r
 set.seed(100)
@@ -65,13 +65,13 @@ data_plot <- data.frame(Posterior = c(beta0_CAVI,beta1_CAVI,beta0_SVI,beta1_SVI)
 
 ### Sample size `n = 100`, `n = 1000` and `n = 10000`.
 
-To study empirically the behavior of the approximating distributions from CAVI and SVI as the sample sizes `n` increases, let us repeat the above simulation for `n = 100`, `n = 1000` and `n = 10000`. The code is exactly the same as in the one discussed for `n = 20`, with the only difference that the sample size is progressively increased.
+To study empirically the behavior of the approximating distributions from CAVI and SVI as the sample sizes `n` increases, let us repeat the above simulation for `n = 100`, `n = 1000` and `n = 10000`. The code is exactly the same as the one considered for `n = 20`, with the only difference that the sample size `n` is progressively increased.
 
 ```r
 nn <- c(100,1000,10000) # Setting the sample size
 
 for(n in nn){
-  set.seed(123)     # Set the seed to make this experiment reproducible
+  set.seed(123)      # Set the seed to make this experiment reproducible
   x <- runif(n,-2,2) # Generating the covariate space
   X <- cbind(1,x)    # Design matrix: the intercept is included
   y <- rbinom(n,1,prob = plogis(X%*%beta))
@@ -92,7 +92,7 @@ for(n in nn){
 
 ### Results
 
-The following code reproduces Figure 1 in the paper. 
+The following code reproduces **Figure 1** in the paper. 
 
 ```r
 ggplot(data=data_plot, aes(x = as.factor(Sample_size), y = Posterior, fill=Algorithm)) + facet_grid(~beta) + geom_boxplot(alpha=0.7) + theme_bw() + scale_fill_grey() + geom_hline(yintercept=1, linetype="dotted") + xlab("Sample size") + ylab("Regression Coefficient")
@@ -102,4 +102,4 @@ ggsave("img/CAVI_vs_SVI.pdf", width=9,height=4)
 
 ![](https://raw.githubusercontent.com/tommasorigon/logisticVB/master/img/CAVI_vs_SVI.png)
 
-As apparent from the plot above, both the CAVI and the SVI nicely converge to the true values `(1,1)` as the sample size increases. As one would expect, the posterior variability decreases as more data are collected. However, especially for large sample sizes, there might be some differences between the CAVI and the SVI algorithm.
+As is clear from the above figure, although SVI relies on noisy gradients, the final approximations are similar to the optimal solutions produced by CAVI. Moreover, these approximate posteriors increasingly shrinks around the true coefficients as `n`, thus supporting Corollary 1 in the paper, while also highlighting how the entire approximated posterior, and not only its expectation, concentrates around the truth. However, especially for large sample sizes, there might be some differences between the CAVI and the SVI algorithm.
