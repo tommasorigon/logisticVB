@@ -1,6 +1,6 @@
 
 
-This tutorial reproduces the illustrative simulation study in Section 3 of the paper [Durante and Rigon (2018). *Conditionally conjugate variational Bayes in logistic models*](https://arxiv.org/abs/1711.06999). The core functions of our implementations are made available in the R file [`logistic.R`](https://github.com/tommasorigon/logisticVB/blob/master/logistic.R), which can be downloaded from this repository. All the analyses are performed with a **MacBook Air (OS X Sierra, version 10.13.6)**, using an `R` version **3.5.0**. 
+This tutorial reproduces the illustrative simulation study in Section 3.2 of the paper [Durante and Rigon (2018). *Conditionally conjugate variational Bayes in logistic models*](https://arxiv.org/abs/1711.06999). The core functions of our implementations are made available in the R file [`logistic.R`](https://github.com/tommasorigon/logisticVB/blob/master/logistic.R), which can be downloaded from this repository. All the analyses are performed with a **MacBook Air (OS X Sierra, version 10.13.6)**, using an `R` version **3.5.0**. 
 
 As a first step, let us load in memory the file [`logistic.R`](https://github.com/tommasorigon/logisticVB/blob/master/logistic.R) and the `ggplot2` library.
 
@@ -14,7 +14,7 @@ library(ggplot2)     # Plots
 
 We consider an illustrative dataset having a binary response `y` simulated from a logistic regression with an intercept term and a single continuous covariate `x`. In simulating the response data, we set both the **intercept** and the **slope**—comprising the true coefficients vector `beta`—equal to 1. The values of the covariate `x` are instead simulated uniformly in the interval `(-2,2)` for each statistical unit.
 
-We approximate the posterior distribution via **Coordinate Ascent Variational Inference** (CAVI) (see `logit_CAVI` function) and **Stochastic Variational Inference** (SVI) (see `logit_SVI` function), considering a moderately diffuse Gaussian prior for the regression coefficients, as outlined in Section 3 of the paper. According to Section 3.2 in the articole, the implementation of SVI requires also the choice of the number of iterations `iter`, the delay `tau` and the forgetting rate `kappa`, which are pre-specified in the code below. 
+We approximate the posterior distribution via **Coordinate Ascent Variational Inference** (CAVI) (see `logit_CAVI` function) and **Stochastic Variational Inference** (SVI) (see `logit_SVI` function), considering a moderately diffuse Gaussian prior for the regression coefficients, as outlined in Section 3.2 of the paper. According to Section 3.2 in the article, the implementation of SVI requires also the choice of the number of iterations `iter`, the delay `tau` and the forgetting rate `kappa`, which are pre-specified in the code below. 
 
 ```r
 # True vector of regression coefficients
