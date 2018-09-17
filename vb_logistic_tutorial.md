@@ -51,7 +51,7 @@ CAVI_output <- logit_CAVI(X = X, y = y, prior = prior) # CAVI algorithm
 SVI_output  <- logit_SVI(X = X, y = y,  prior = prior,  iter = iter, tau = tau, kappa = kappa) # SVI algorithm
 ```
 
-Finally, we simulate posterior samples from the Gaussian approximating posteriors arising from CAVI and SVI optimizations. These samples are useful to compare the approximating distributions from the two algorithms.
+Finally, we simulate posterior samples from the **Gaussian approximating posteriors arising from CAVI and SVI optimizations**. These samples are useful to compare the approximating distributions from the two algorithms.
 
 ```r
 set.seed(100)
