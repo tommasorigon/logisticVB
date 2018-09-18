@@ -13,7 +13,7 @@ library(knitr)       # To produce tables
 
 The main aim of this illustrative simulation is to show that the **Newton-Raphson** algorithm for logistic regression, sometimes called also *Fisher scoring*, can fail even when the maximum likelihood estimate (MLE) is well defined. To clarify, this problem is **not** related to the so-called *separability issue*. In fact, in this case the MLE simply does not exists. To quantitatively evaluate the theoretical results on convergence rates discussed in **Proposition 1** of the paper, we additionally implement the **EM** based on the Pòlya-Gamma data augmentation (see `logit_EM` function) and the **MM** of [Böhning and Lindsay (1988)](https://link.springer.com/article/10.1007/BF00049423) (see `logit_MM` function). 
 
-The dataset considered in this analysis has been suggested in [this blog post](http://www.win-vector.com/blog/2012/08/how-robust-is-logistic-regression/) and comprises a binary response `y` along with an intercept term and a single continous covariate defining the design matrix `X`. Let us create this dataset below. 
+The dataset considered in this analysis has been suggested in [this blog post](http://www.win-vector.com/blog/2012/08/how-robust-is-logistic-regression/) and comprises a binary response `y` along with an intercept term and a single covariate defining the design matrix `X`. Let us create this dataset below. 
 
 ```r
 y <- c(rep(0,50),1,rep(0,50),0,rep(0,5),rep(1,10))        # Binary outcomes
@@ -64,7 +64,9 @@ As discussed in the Appendix of the paper, both the **MM** and the **EM** algori
 
 ## Empirical convergence rate of the MM and EM algorithms
 
-In this paragraph we empirically check that the convergence rate of the EM based on the Polya-gamma distribution has a faster convergence rate compared to the MM approach of Böhning. To this extent, we consider the following simulated dataset, with a a sample size `n = 10000` and several covariates.
+Let us confirm the above findings on the convergence rates of **MM** and **EM** in a more general setting with `n = 10000` statistical units and several covariates simulated uniformly in the interval `(-2,2)`. The binary response data are instead generated from a logistic regression with true coefficients vector `(1, 1, -1, 1,-1, 1, -1)`.
+
+Let us create this simulated dataset.
 
 ```r
 n <- 10000 # Setting the sample size
@@ -76,14 +78,14 @@ X <- cbind(1,runif(n,-2,2),runif(n,-2,2),runif(n,-2,2),runif(n,-2,2),runif(n,-2,
 y <- rbinom(n,1,prob = plogis(X%*%beta))
 ```
 
-Then, we fit a logistic regression model using the EM and the MM algorithm. We initialize both the algorithms at `0`, as before.
+We now maximize the log-likelihood via EM and the MM algorithms. As done before, we initialize the coeffients values at `0`.
 
 ```r
 fit_EM <- logit_EM(X,y) # EM via Polya-gamma
 fit_MM <- logit_MM(X,y) # Böhning and Lindsay (1988)
 ```
 
-For this specific dataset, the log-likelihood evaluated in the maximum is equal to `-3571.163`. The MM algorithm requires `132` iterations to reach convergence whereas the EM algorithm reaches the maximum more rapidly, requiring `60` iterations. To provide a graphical representation of the increased rate of convergence, we display the first `20` values of the log-likelihood as a function of the iterations.
+For this specific dataset, the log-likelihood evaluated in the maximum is equal to `-3571.163`. The MM algorithm requires `130` iterations to reach convergence whereas the EM algorithm reaches the maximum more rapidly, requiring `59` iterations. To provide a graphical representation of the increased rate of convergence, we display the first `20` values of the log-likelihood as a function of the iterations.
 
 ```r
 iters <- 20
@@ -96,4 +98,4 @@ ggsave("img/EM_vs_MM.pdf", width=9,height=4)
 
 ![](https://raw.githubusercontent.com/tommasorigon/logisticVB/master/img/EM_vs_MM.png)
 
-As apparent from the plot above, the MM algorithm reach converges more slowly compared to the EM, although both eventually reach the maximum likelihood estimate.
+As apparent from the plot figure, the MM algorithm reach converges more slowly compared to the EM, although both eventually reach the maximum likelihood estimate. This result confirms again **Proposition 1** in the article.
