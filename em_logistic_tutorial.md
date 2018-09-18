@@ -20,7 +20,7 @@ y <- c(rep(0,50),1,rep(0,50),0,rep(0,5),rep(1,10))        # Binary outcomes
 X <- cbind(1,c(rep(0,50),0,rep(0.001,50),100,rep(-1,15))) # Design matrix
 ```
 
-To perform maximum likelihood estimation, we initialize the three algorithms in (0,0), which is the typical choice in standard statistical packages. This can be done by setting `beta_start = c(0,0)`. 
+To perform maximum likelihood estimation, we initialize the three algorithms in `(0,0)`, which is the typical choice in standard statistical packages. This can be done by setting `beta_start = c(0,0)`. 
 
 ```r
 fit_NR <- logit_NR(X,y,beta_start=c(0,0))               # Newton-Raphson
@@ -28,8 +28,7 @@ fit_EM <- logit_EM(X,y,beta_start=c(0,0))               # EM via Polya-gamma
 fit_MM <- logit_MM(X,y,beta_start=c(0,0), maxiter=10^5) # Böhning and Lindsay (1988)
 ```
 
-For this specific dataset, the maximum values is attained when the intercept and slope coefficients coefficients are equal to `-4.603`and `-5.296`, respectively, whereas the log-likelihood, evaluated in the maximum, is equal to `-15.156`. To study the performance of the three maximization methods let us study the log-likelihood of the first 5 iterations.
-
+For this specific dataset, the maximum values is attained when the intercept and the slope coefficients coefficients are equal to `-4.603`and `-5.296`, respectively, whereas the log-likelihood, evaluated in the maximum, is equal to `-15.156`. To study the performance of the three maximization methods let us study the log-likelihood sequence of the first 5 iterations.
 
 ```r
 tab <- rbind(Newton_Raphson=fit_NR$Convergence[1:6,2],
@@ -45,7 +44,7 @@ kable(tab)
 |EM             | -81.09822| -38.81425| -36.77784| -36.33180| -36.16827|  -36.06429|
 |MM             | -81.09822| -38.81425| -37.02854| -36.52533| -36.33067|  -36.23546|
 
-Since the algorithms are initialized at the same point `(0,0)`, the log-likelihood at iteration `0` is the same for all the methods. Moreover, they also coincide at iteration `1`, because the three algorithms produce the same updating step. However, from iteration `2` they become different. The log-likelihood sequence of **Newton-Raphson** algorithm falls at iteration `5`, and the coefficients estimates diverge. Indeed, note that also the default `glm` R command fails to reach convergence, although it raises a warning. In fact, the algorithm adopted in `glm` is the Newton-Raphson. 
+Since the algorithms are initialized at the same point `(0,0)`, the log-likelihood at iteration `0` is the same for all the routines. Moreover, they also coincide at iteration `1`, because the three methods produce the same updating step. However, after iteration `2` they become different. The log-likelihood sequence of the **Newton-Raphson** algorithm falls at iteration `5`, and the coefficients estimates diverge. Indeed, note that also the default `glm` R command fails to reach convergence. In fact, the algorithm adopted in `glm` is the Newton-Raphson. 
 
 ```r
 coef(glm(y~X[,-1],family="binomial"))
@@ -78,14 +77,14 @@ X <- cbind(1,runif(n,-2,2),runif(n,-2,2),runif(n,-2,2),runif(n,-2,2),runif(n,-2,
 y <- rbinom(n,1,prob = plogis(X%*%beta))
 ```
 
-We now maximize the log-likelihood via EM and the MM algorithms. As done before, we initialize the coeffients values at `0`.
+We now maximize the log-likelihood via EM and MM algorithms. As done before, we initialize the coeffients values at `0`.
 
 ```r
 fit_EM <- logit_EM(X,y) # EM via Polya-gamma
 fit_MM <- logit_MM(X,y) # Böhning and Lindsay (1988)
 ```
 
-For this specific dataset, the log-likelihood evaluated in the maximum is equal to `-3571.163`. The MM algorithm requires `130` iterations to reach convergence whereas the EM algorithm reaches the maximum more rapidly, requiring `59` iterations. To provide a graphical representation of the increased rate of convergence, we display the first `20` values of the log-likelihood as a function of the iterations.
+For this specific dataset, the log-likelihood evaluated in the maximum is equal to `-3571.163`. The MM algorithm requires `130` iterations to reach convergence whereas the EM algorithm reaches the maximum more rapidly, requiring `59` iterations. To provide a graphical representation of the improved rate of convergence, we display the first `20` values of the log-likelihood as a function of the iterations.
 
 ```r
 iters <- 20
@@ -98,4 +97,4 @@ ggsave("img/EM_vs_MM.pdf", width=9,height=4)
 
 ![](https://raw.githubusercontent.com/tommasorigon/logisticVB/master/img/EM_vs_MM.png)
 
-As apparent from the plot figure, the MM algorithm reach converges more slowly compared to the EM, although both eventually reach the maximum likelihood estimate. This result confirms again **Proposition 1** in the article.
+As is clear from the above figure, the MM algorithm converges more slowly compared to the EM, although both eventually reach the maximum likelihood estimate. This result confirms again **Proposition 1** in the article.
