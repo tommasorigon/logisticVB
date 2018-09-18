@@ -28,7 +28,7 @@ fit_EM <- logit_EM(X,y,beta_start=c(0,0))               # EM via Polya-gamma
 fit_MM <- logit_MM(X,y,beta_start=c(0,0), maxiter=10^5) # Böhning and Lindsay (1988)
 ```
 
-For this specific dataset, the maximum values is attained when the intercept and the slope coefficients coefficients are equal to `-4.603`and `-5.296`, respectively, whereas the log-likelihood, evaluated in the maximum, is equal to `-15.156`. To study the performance of the three maximization methods let us study the log-likelihood sequence of the first 5 iterations.
+For this specific dataset, the maximum value is attained when the intercept and the slope coefficients coefficients are equal to `-4.603`and `-5.296`, respectively, whereas the log-likelihood, evaluated in the maximum, is equal to `-15.156`. To study the performance of the three maximization methods let us study the log-likelihood sequence of the first 5 iterations.
 
 ```r
 tab <- rbind(Newton_Raphson=fit_NR$Convergence[1:6,2],
