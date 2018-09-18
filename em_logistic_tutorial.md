@@ -84,7 +84,7 @@ fit_EM <- logit_EM(X,y) # EM via Polya-gamma
 fit_MM <- logit_MM(X,y) # Böhning and Lindsay (1988)
 ```
 
-For this specific dataset, the log-likelihood evaluated in the maximum is equal to `-3571.163`. The MM algorithm requires `131` iterations to reach convergence whereas the EM algorithm reaches the maximum more rapidly, requiring `60` iterations. To provide a graphical representation of the improved rate of convergence, we display the first `20` values of the log-likelihood as a function of the iterations.
+For this specific dataset, the log-likelihood evaluated in the maximum is equal to `-3571.163`. The MM algorithm requires `132` iterations to reach convergence whereas the EM algorithm reaches the maximum more rapidly, requiring `60` iterations. To provide a graphical representation of the improved rate of convergence, we display the first `20` values of the log-likelihood as a function of the iterations.
 
 ```r
 iters <- 20
