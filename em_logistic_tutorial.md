@@ -59,7 +59,7 @@ coef(glm(y~X[,-1],family="binomial"))
 ## -3.372166e+15 -2.085057e+13
 ```
 
-As discussed in the Appendix of the paper, both the **MM** and the **EM** algorithms produce a monotone log-likelihood sequence and eventually reach convergence. However, as is clear from the above table, the EM based on Pòlya-Gamma data augmentation seems to reach the maximum more quickly than MM. This is consistent with **Proposition 1** in the article. Indeed, in this specific simulation the MM requires `41396` iterations to reach convergence, whereas the EM only `360`.
+As discussed in the Appendix of the paper, both the **MM** and the **EM** algorithms produce a monotone log-likelihood sequence and eventually reach convergence. However, as is clear from the above table, the EM based on Pòlya-Gamma data augmentation seems to reach the maximum more quickly than MM. This is consistent with **Proposition 1** in the article. Indeed, in this specific simulation the MM requires `41397` iterations to reach convergence, whereas the EM only `361`.
 
 ## Empirical convergence rate of the MM and EM algorithms
 
@@ -84,7 +84,7 @@ fit_EM <- logit_EM(X,y) # EM via Polya-gamma
 fit_MM <- logit_MM(X,y) # Böhning and Lindsay (1988)
 ```
 
-For this specific dataset, the log-likelihood evaluated in the maximum is equal to `-3571.163`. The MM algorithm requires `130` iterations to reach convergence whereas the EM algorithm reaches the maximum more rapidly, requiring `59` iterations. To provide a graphical representation of the improved rate of convergence, we display the first `20` values of the log-likelihood as a function of the iterations.
+For this specific dataset, the log-likelihood evaluated in the maximum is equal to `-3571.163`. The MM algorithm requires `131` iterations to reach convergence whereas the EM algorithm reaches the maximum more rapidly, requiring `60` iterations. To provide a graphical representation of the improved rate of convergence, we display the first `20` values of the log-likelihood as a function of the iterations.
 
 ```r
 iters <- 20
