@@ -77,7 +77,7 @@ X <- cbind(1,runif(n,-2,2),runif(n,-2,2),runif(n,-2,2),runif(n,-2,2),runif(n,-2,
 y <- rbinom(n,1,prob = plogis(X%*%beta))
 ```
 
-We now maximize the log-likelihood via EM and MM algorithms. As done before, we initialize the coeffients values at `0`.
+We now maximize the log-likelihood via EM and MM. As done before, we initialize the coeffients values at `0`.
 
 ```r
 fit_EM <- logit_EM(X,y) # EM via Polya-gamma
