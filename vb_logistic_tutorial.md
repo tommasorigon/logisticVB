@@ -102,4 +102,4 @@ ggsave("img/CAVI_vs_SVI.pdf", width=9,height=4)
 
 ![](https://raw.githubusercontent.com/tommasorigon/logisticVB/master/img/CAVI_vs_SVI.png)
 
-As is clear from the above figure, although SVI relies on noisy gradients, the final approximations are similar to the optimal solutions produced by CAVI. Moreover, these approximate posteriors increasingly shrink around the true coefficients as `n` grows, thus supporting **Corollary 1** in the paper, while also highlighting how the entire approximated posterior, and not only its expectation, concentrates around the truth. However, especially for large sample sizes, there might be some differences between the CAVI and the SVI algorithm.
+As is clear from the above figure, although SVI relies on noisy gradients, the final approximations are similar to the optimal solutions produced by CAVI. Moreover, these approximate posteriors increasingly shrinks around the true coefficients as `n`  grows, thus suggesting desirable asymptotic behavior of the **CAVI** and **SVI** solutions. However, especially for large sample sizes, there might be some differences between the CAVI and the SVI algorithm.
