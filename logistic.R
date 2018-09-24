@@ -45,7 +45,7 @@ logit_CAVI <- function(X, y, prior, tol = 1e-16, maxiter=10000){
     omega      <- tanh(xi/2)/(2*xi); 
     omega[is.nan(omega)] <- 0.25
     
-    lowerbound[t]  <- -0.5*p + 0.5*ldet(Sigma_vb) + 0.5*Pdet - 0.5*t(mu_vb - mu)%*%P%*%(mu_vb - mu) + sum((y-0.5)*eta +log(plogis(xi)) - 0.5*xi) - 0.5*sum(diag(P %*% Sigma_vb))
+    lowerbound[t]  <- 0.5*p + 0.5*ldet(Sigma_vb) + 0.5*Pdet - 0.5*t(mu_vb - mu)%*%P%*%(mu_vb - mu) + sum((y-0.5)*eta +log(plogis(xi)) - 0.5*xi) - 0.5*sum(diag(P %*% Sigma_vb))
     
     if(abs(lowerbound[t] - lowerbound[t-1]) < tol) return(list(mu = matrix(mu_vb,p,1), Sigma=matrix(Sigma_vb,p,p), 
                                                                Convergence=cbind(Iteration=(1:t)-1, 
