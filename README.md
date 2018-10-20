@@ -2,7 +2,7 @@
 # Conditionally conjugate variational Bayes for logistic models
 
 
-This repository is associated with the article [Durante and Rigon (2018). *Conditionally conjugate variational Bayes for logistic models*](https://arxiv.org/abs/1711.06999), and provides detailed materials to implement the different algorithms derived in the paper along with some quantitative assessments of such computational routines. 
+This repository is associated with the article [Durante and Rigon (2018). *Conditionally conjugate mean-field variational Bayes for logistic models*](https://arxiv.org/abs/1711.06999), and provides detailed materials to implement the different algorithms derived in the paper along with some quantitative assessments of such computational routines. 
 
 The core functions of our implementations are made available in the file [`logistic.R`](https://github.com/tommasorigon/logisticVB/blob/master/logistic.R), which can be downloaded from this repository. These codes allow the implementation of the algorithms derived in the paper. Such routines cover **CAVI** and **SVI** for approximate Bayesian logistic regression, along with classical **ML estimation via EM**. In addition, we provide two tutorials aimed at fully reproducing our results. More specifically:
 
