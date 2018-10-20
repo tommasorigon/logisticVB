@@ -1,5 +1,5 @@
 
-# Conditionally conjugate variational Bayes in logistic models
+# Conditionally conjugate variational Bayes for logistic models
 
 
 This repository is associated with the article [Durante and Rigon (2018). *Conditionally conjugate variational Bayes for logistic models*](https://arxiv.org/abs/1711.06999), and provides detailed materials to implement the different algorithms derived in the paper along with some quantitative assessments of such computational routines. 
