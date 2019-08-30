@@ -1,4 +1,4 @@
-This tutorial provides quantitative support to the theoretical results in the Appendix of the paper [Durante and Rigon (2018). *Conditionally conjugate mean-field variational Bayes for logistic models*](https://arxiv.org/abs/1711.06999). Here the focus is on maximum likelihood estimation of the logistic coefficients and not on Bayesian inference. The core functions of our implementations are made available in the R file [`logistic.R`](https://github.com/tommasorigon/logisticVB/blob/master/logistic.R), which can be downloaded from this repository. All the analyses are performed with a **MacBook Air (OS X Sierra, version 10.13.6)**, using a R version **3.5.0**. 
+This tutorial provides quantitative support to the theoretical results in the Appendix of the paper [Durante and Rigon (2019). *Conditionally conjugate mean-field variational Bayes for logistic models*](https://arxiv.org/abs/1711.06999). Here the focus is on maximum likelihood estimation of the logistic coefficients and not on Bayesian inference. The core functions of our implementations are made available in the R file [`logistic.R`](https://github.com/tommasorigon/logisticVB/blob/master/logistic.R), which can be downloaded from this repository. All the analyses are performed with a **MacBook Air (OS X Sierra, version 10.13.6)**, using a R version **3.5.0**. 
 
 As a first step, let us load in memory the file [`logistic.R`](https://github.com/tommasorigon/logisticVB/blob/master/logistic.R), as well as the `ggplot2` and the `knitr` libraries.
 
@@ -97,4 +97,4 @@ ggsave("img/EM_vs_MM.pdf", width=9,height=4)
 
 ![](https://raw.githubusercontent.com/tommasorigon/logisticVB/master/img/EM_vs_MM.png)
 
-As is clear from the above figure, the MM algorithm converges more slowly compared to the EM, although both eventually reach the maximum likelihood estimate. This result confirms again **Proposition 1** in the article.
+As is clear from the above figure, the MM algorithm converges more slowly compared to the EM, although both eventually reach the maximum likelihood estimate. This result confirms again **Proposition A.1** in the article.
