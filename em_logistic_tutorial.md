@@ -11,7 +11,7 @@ library(knitr)       # To produce tables
 
 ## Failure of the Newton-Raphson algorithm in logistic regression
 
-The main aim of this illustrative simulation is to show that the **Newton-Raphson** algorithm for logistic regression, sometimes called also *Fisher scoring*, can fail even when the maximum likelihood estimate (MLE) is well defined. To clarify, this problem is not related to the so-called *separability issue*. In fact, in this case the MLE simply does not exists. To quantitatively evaluate the theoretical results on convergence rates discussed in **Proposition 1** of the paper, we additionally implement the **EM** based on the Pòlya-Gamma data augmentation (see `logit_EM` function) and the **MM** of [Böhning and Lindsay (1988)](https://link.springer.com/article/10.1007/BF00049423) (see `logit_MM` function). 
+The main aim of this illustrative simulation is to show that the **Newton-Raphson** algorithm for logistic regression, sometimes called also *Fisher scoring*, can fail even when the maximum likelihood estimate (MLE) is well defined. To clarify, this problem is not related to the so-called *separability issue*. In fact, in this case the MLE simply does not exists. To quantitatively evaluate the theoretical results on convergence rates discussed in **Proposition A.1** of the paper, we additionally implement the **EM** based on the Pòlya-Gamma data augmentation (see `logit_EM` function) and the **MM** of [Böhning and Lindsay (1988)](https://link.springer.com/article/10.1007/BF00049423) (see `logit_MM` function). 
 
 The dataset considered in this analysis has been suggested in [this blog post](http://www.win-vector.com/blog/2012/08/how-robust-is-logistic-regression/) and comprises a binary response `y` along with an intercept term and a single covariate defining the design matrix `X`. Let us create this dataset below. 
 
@@ -59,7 +59,7 @@ coef(glm(y~X[,-1],family="binomial"))
 ## -3.372166e+15 -2.085057e+13
 ```
 
-As discussed in the Appendix of the paper, both the **MM** and the **EM** algorithms produce a monotone log-likelihood sequence and eventually reach convergence. However, as is clear from the above table, the EM based on Pòlya-Gamma data augmentation seems to reach the maximum more quickly than MM. This is consistent with **Proposition 1** in the article. Indeed, in this specific simulation the MM requires `41397` iterations to reach convergence, whereas the EM only `361`.
+As discussed in the Appendix of the paper, both the **MM** and the **EM** algorithms produce a monotone log-likelihood sequence and eventually reach convergence. However, as is clear from the above table, the EM based on Pòlya-Gamma data augmentation seems to reach the maximum more quickly than MM. This is consistent with **Proposition A.1** in the article. Indeed, in this specific simulation the MM requires `41397` iterations to reach convergence, whereas the EM only `361`.
 
 ## Empirical convergence rate of the MM and EM algorithms
 
