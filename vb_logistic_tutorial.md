@@ -1,6 +1,6 @@
 
 
-This tutorial reproduces the illustrative simulation study in Section 3.2 of the paper [Durante and Rigon (2018). *Conditionally conjugate mean-field variational Bayes for logistic models*](https://arxiv.org/abs/1711.06999). The core functions of our implementations are made available in the R file [`logistic.R`](https://github.com/tommasorigon/logisticVB/blob/master/logistic.R), which can be downloaded from this repository. All the analyses are performed with a **MacBook Air (OS X Sierra, version 10.13.6)**, using an `R` version **3.5.0**. 
+This tutorial reproduces the illustrative simulation study in Section 3.2 of the paper [Durante and Rigon (2019). *Conditionally conjugate mean-field variational Bayes for logistic models*](https://arxiv.org/abs/1711.06999). The core functions of our implementations are made available in the R file [`logistic.R`](https://github.com/tommasorigon/logisticVB/blob/master/logistic.R), which can be downloaded from this repository. All the analyses are performed with a **MacBook Air (OS X Sierra, version 10.13.6)**, using an `R` version **3.5.0**. 
 
 As a first step, let us load in memory the file [`logistic.R`](https://github.com/tommasorigon/logisticVB/blob/master/logistic.R) and the `ggplot2` library.
 
